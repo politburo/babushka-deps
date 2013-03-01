@@ -37,7 +37,7 @@ dep("elasticsearch-extracted", :version) do
   end
 
   def elasticsearch_tar_gz
-    '/tmp/elasticsearch-#{version}.tar.gz'.p
+    "/tmp/elasticsearch-#{version}.tar.gz".p
   end
 
   met? {
