@@ -1,5 +1,7 @@
 # Based on Ben Hoskins' 'user exists' dep
 dep 'user-exists', :username, :group, :homedir do
+  requires_when_unment "group-exists".with(group)
+
   homedir.default("/home/#{username}")
 
   on :osx do
@@ -31,3 +33,11 @@ dep 'user-exists', :username, :group, :homedir do
   end
 end
 
+dep 'group-exists', :group do
+  on :linux do
+    met? { '/etc/group'.p.grep(/^#{group}:/) }
+    meet {
+      sudo "groupadd #{group}"
+    }
+  end
+end
