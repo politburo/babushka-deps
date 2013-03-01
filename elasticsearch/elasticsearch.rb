@@ -2,7 +2,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
   requires_when_unmet ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
   version.default("0.20.5")
-  port.default("9200")
+  port.default(9200)
   cluster_name.default(`hostname`)
 
   met? {
@@ -20,7 +20,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
     ("elasticsearch-init-script")
 
   version.default("0.20.5")
-  port.default("9200")
+  port.default(9200)
   cluster_name.default(`hostname`)
 
   met? {
@@ -99,7 +99,12 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
 
     original_content = original_elasticsearch_yml.read
     raise "Couldn't read content of '#{original_elasticsearch_yml}'!" if original_content.nil? or (original_content.strip.length <= 0)
-    modified_content = original_content.gsub(/cluster\.name: elasticsearch/, "cluster.name: #{cluster_name}").gsub(/# http\.port: 9200/, "http.port: #{port}")
+    modified_content = original_content.gsub(/# cluster\.name: elasticsearch/, "cluster.name: #{cluster_name}")
+
+    require 'pry'
+    pry
+
+    modified_content.gsub!(/# http\.port: 9200/, "http.port: #{port}") if (port != 9200)
 
     tmp_elasticsearch_yml.open('w+') { | f | f.print modified_content }
 
