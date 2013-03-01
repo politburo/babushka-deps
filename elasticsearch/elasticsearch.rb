@@ -21,9 +21,11 @@ dep("java-installed") do
 end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires ("elasticsearch-extracted").with(version: version), 
-    ("elasticsearch-configured").with(version: version, port: port, cluster_name: cluster_name), 
-    ("elasticsearch-init-script")
+  requires "elasticsearch-extracted".with(version: version), 
+    "elasticsearch-configured".with(version: version, port: port, cluster_name: cluster_name), 
+    "elasticsearch-init-script",
+    "elasticsearch-log-dir",
+    "elasticsearch-data-dir"
 
   version.default("0.20.5")
   port.default(9200)
@@ -136,6 +138,36 @@ dep("elasticsearch-init-script") do
 
   meet {
     render_erb 'elasticsearch.conf.erb', to: '/etc/init/elasticsearch.conf', sudo: true, perms: "+x"
-    sudo "chown elasticsearch:elasticsearch #{elasticsearch_init_script}"
   }
 end
+
+dep("elasticsearch-log-dir") do
+  def elasticsearch_log_dir
+    '/var/log/elasticsearch'.p
+  end
+
+  met? {
+    elasticsearch_log_dir.exists?
+  }
+
+  meet {
+    sudo "mkdir -p #{elasticsearch_log_dir}" and 
+    sudo "chown -R elasticsearch:elasticsearch #{elasticsearch_log_dir}"
+  }
+end
+
+dep("elasticsearch-data-dir") do
+  def elasticsearch_data_dir
+    '/var/lib/elasticsearch'.p
+  end
+
+  met? {
+    elasticsearch_data_dir.exists?
+  }
+
+  meet {
+    sudo "mkdir -p #{elasticsearch_data_dir}" and 
+    sudo "chown -R elasticsearch:elasticsearch #{elasticsearch_data_dir}"
+  }
+end
+
