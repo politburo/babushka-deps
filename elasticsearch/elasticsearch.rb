@@ -1,5 +1,5 @@
 dep("elasticsearch-running", :version, :port, :cluster_name) do
-  requires_when_unmet Dep("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
+  requires_when_unmet ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
   version.default("0.20.5")
   port.default(9200)
@@ -15,7 +15,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires Dep("elasticsearch-extracted").with(version: version), Dep("elasticsearch-configured").with(port: port, cluster_name: cluster_name), Dep("elasticsearch-init-script")
+  requires ("elasticsearch-extracted").with(version: version), Dep("elasticsearch-configured").with(port: port, cluster_name: cluster_name), Dep("elasticsearch-init-script")
 
   version.default("0.20.5")
   port.default(9200)
