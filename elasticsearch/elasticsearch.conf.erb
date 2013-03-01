@@ -9,21 +9,11 @@ respawn limit 10 5
 env ES_HOME=/usr/local/elasticsearch
 env ES_MIN_MEM=256m
 env ES_MAX_MEM=2g
-env DAEMON=$ES_HOME/bin/elasticsearch
-env NAME=elasticsearch
-env LOG_DIR=/var/log/$NAME
-env DATA_DIR=/var/lib/$NAME
-env WORK_DIR=/tmp/$NAME
-env CONFIG_FILE=/etc/$NAME/elasticsearch.yml
-env DAEMON_OPTS="-Des.config=$CONFIG_FILE -Des.path.home=$ES_HOME -Des.path.logs=$LOG_DIR -Des.path.data=$DATA_DIR -Des.path.work=$WORK_DIR"
 
-# setuid elasticsearch
-# setgid elasticsearch
-
-exec su - elasticsearch -c "$DAEMON -f $DAEMON_OPTS"
+exec su - elasticsearch -c "/usr/local/elasticsearch/bin/elasticsearch -f -Des.config=/etc/elasticsearch/elasticsearch.yml -Des.path.home=/usr/local/elasticsearch -Des.path.logs=/var/log/elasticsearch -Des.path.data=/var/lib/elasticsearch -Des.path.work=/tmp/elasticsearch"
 
 pre-start script
-    logger -is "$UPSTART_JOB" "started $DAEMON -f $DAEMON_OPTS"
+    logger -is "$UPSTART_JOB" "started su - elasticsearch -c \"/usr/local/elasticsearch/bin/elasticsearch -f -Des.config=/etc/elasticsearch/elasticsearch.yml -Des.path.home=/usr/local/elasticsearch -Des.path.logs=/var/log/elasticsearch -Des.path.data=/var/lib/elasticsearch -Des.path.work=/tmp/elasticsearch\" "
 end script
 
 pre-stop script
