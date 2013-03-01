@@ -1,6 +1,6 @@
 # Based on Ben Hoskins' 'user exists' dep
 dep 'user-exists', :username, :group, :homedir do
-  requires_when_unment "group-exists".with(group)
+  requires_when_unmet "group-exists".with(group)
 
   homedir.default("/home/#{username}")
 
