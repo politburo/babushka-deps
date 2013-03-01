@@ -23,7 +23,7 @@ env DAEMON_OPTS="-Des.config=$CONFIG_FILE -Des.path.home=$ES_HOME -Des.path.logs
 exec su - elasticsearch -c "$DAEMON -f $DAEMON_OPTS"
 
 pre-start script
-    logger -is "$UPSTART_JOB" "started"
+    logger -is "$UPSTART_JOB" "started $DAEMON -f $DAEMON_OPTS"
 end script
 
 pre-stop script
