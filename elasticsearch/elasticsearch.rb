@@ -126,6 +126,6 @@ dep("elasticsearch-init-script") do
   }
 
   meet {
-    render_erb 'elasticsearch.init.d.erb', to: '/etc/init.d/elasticsearch'
+    render_erb 'elasticsearch.init.d.erb', to: '/etc/init.d/elasticsearch', sudo: true
   }
 end
