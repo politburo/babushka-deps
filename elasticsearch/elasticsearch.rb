@@ -30,7 +30,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-extracted", :version) do
-  requires_when_unmet Dep("elasticsearch-downloaded").with(version: version)
+  requires_when_unmet ("elasticsearch-downloaded").with(version: version)
 
   def elasticsearch_home
     '/usr/local/elasticsearch'.p
