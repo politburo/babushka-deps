@@ -87,7 +87,7 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
   end
 
   def original_elasticsearch_yml
-    elasticsearch_home / 'elasticsearch.yml'
+    elasticsearch_home / 'config' / 'elasticsearch.yml'
   end
 
   met? {
