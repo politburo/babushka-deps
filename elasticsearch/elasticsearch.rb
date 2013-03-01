@@ -1,4 +1,4 @@
-dep "elasticsearch-running", :port, :cluster_name do
+dep("elasticsearch-running", :port, :cluster_name) do
   requires_if_unmet "elasticsearch-installed"
 
   port.default(:9200)
