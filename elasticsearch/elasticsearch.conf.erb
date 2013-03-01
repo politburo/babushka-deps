@@ -17,10 +17,10 @@ env WORK_DIR=/tmp/$NAME
 env CONFIG_FILE=/etc/$NAME/elasticsearch.yml
 env DAEMON_OPTS="-Des.config=$CONFIG_FILE -Des.path.home=$ES_HOME -Des.path.logs=$LOG_DIR -Des.path.data=$DATA_DIR -Des.path.work=$WORK_DIR"
 
-setuid elasticsearch
+# setuid elasticsearch
 # setgid elasticsearch
 
-exec sh -c "$DAEMON -f $DAEMON_OPTS"
+exec su - elasticsearch -c "$DAEMON -f $DAEMON_OPTS"
 
 pre-start script
     logger -is "$UPSTART_JOB" "started"
