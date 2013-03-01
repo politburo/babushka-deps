@@ -118,9 +118,8 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-user") do
-  requires 'benhoskins:user exists'.with(username: 'elasticsearch', home_dir_base: '/usr/local')
+  requires 'user-exists'.with(username: 'elasticsearch', homedir: '/usr/local/elasticsearch'.p)
 end
-
 
 dep("elasticsearch-init-script") do
   requires "elasticsearch-user"
