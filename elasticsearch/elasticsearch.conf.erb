@@ -13,7 +13,7 @@ env ES_MAX_MEM=2g
 exec su - elasticsearch -c "/usr/local/elasticsearch/bin/elasticsearch -f -Des.config=/etc/elasticsearch/elasticsearch.yml -Des.path.home=/usr/local/elasticsearch -Des.path.logs=/var/log/elasticsearch -Des.path.data=/var/lib/elasticsearch -Des.path.work=/tmp/elasticsearch"
 
 pre-start script
-    logger -is "$UPSTART_JOB" "started su - elasticsearch -c \"/usr/local/elasticsearch/bin/elasticsearch -f -Des.config=/etc/elasticsearch/elasticsearch.yml -Des.path.home=/usr/local/elasticsearch -Des.path.logs=/var/log/elasticsearch -Des.path.data=/var/lib/elasticsearch -Des.path.work=/tmp/elasticsearch\" "
+    logger -is "$UPSTART_JOB" "started"
 end script
 
 pre-stop script

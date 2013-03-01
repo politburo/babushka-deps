@@ -11,7 +11,21 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
 
   meet {
     sudo "start elasticsearch"
+    
+    wait_for(10, "Waiting for ES to start...") { shell? "curl http://localhost:#{port}" }
   }
+
+  def wait_for timeout, message, &block
+    waited_for, result = 0, nil
+    log_block message do
+      while !(result = yield) && (waited_for < timeout)
+        waited_for += 0.2
+        sleep 0.2
+      end
+      result
+    end
+  end
+
 end
 
 dep("java-installed") do
