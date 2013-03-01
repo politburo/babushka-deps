@@ -15,7 +15,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires , Dep("elasticsearch-extracted").with(version: version), Dep("elasticsearch-configured").with(port: port, cluster_name: cluster_name), Dep("elasticsearch-init-script")
+  requires Dep("elasticsearch-extracted").with(version: version), Dep("elasticsearch-configured").with(port: port, cluster_name: cluster_name), Dep("elasticsearch-init-script")
 
   version.default("0.20.5")
   port.default(9200)
