@@ -32,7 +32,7 @@ end
 dep("elasticsearch-extracted", :version) do
 
   def elasticsearch_home
-    path '/usr/local/elasticsearch'
+    '' / 'usr/local/elasticsearch'
   end
 
   met? {
