@@ -1,5 +1,5 @@
 dep("elasticsearch-running", :version, :port, :cluster_name) do
-  requires_when_unmet Dep("java-installed"), Dep("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
+  requires_when_unmet ("java-installed"), ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
   version.default("0.20.5")
   port.default(9200)
@@ -21,9 +21,9 @@ dep("java-installed") do
 end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires Dep("elasticsearch-extracted").with(version: version), 
-    Dep("elasticsearch-configured").with(version: version, port: port, cluster_name: cluster_name), 
-    Dep("elasticsearch-init-script")
+  requires ("elasticsearch-extracted").with(version: version), 
+    ("elasticsearch-configured").with(version: version, port: port, cluster_name: cluster_name), 
+    ("elasticsearch-init-script")
 
   version.default("0.20.5")
   port.default(9200)
@@ -36,7 +36,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-extracted", :version) do
-  requires_when_unmet Dep("elasticsearch-downloaded").with(version: version)
+  requires_when_unmet ("elasticsearch-downloaded").with(version: version)
 
   def elasticsearch_home
     '/usr/local/elasticsearch'.p
@@ -74,7 +74,7 @@ dep("elasticsearch-downloaded", :version) do
 end
 
 dep("elasticsearch-configured",:version, :port, :cluster_name) do
-  requires_when_unmet Dep("elasticsearch-extracted").with(version: version)
+  requires_when_unmet ("elasticsearch-extracted").with(version: version)
 
   def etc_elasticsearch
     '/etc/elasticsearch'.p
