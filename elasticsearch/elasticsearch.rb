@@ -1,12 +1,12 @@
 dep("elasticsearch-running", :version, :port, :cluster_name) do
-  requires_when_unmet ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
+  requires_when_unmet Dep("java-installed"), Dep("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
   version.default("0.20.5")
   port.default(9200)
   cluster_name.default(`hostname`)
 
   met? {
-    shell "curl http://localhost:#{port}"
+    shell? "curl http://localhost:#{port}"
   }
 
   meet {
@@ -14,10 +14,16 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
   }
 end
 
+dep("java-installed") do
+  met? {
+    shell? "java -version"
+  }
+elasticsearch-installed
+
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires ("elasticsearch-extracted").with(version: version), 
-    ("elasticsearch-configured").with(version: version, port: port, cluster_name: cluster_name), 
-    ("elasticsearch-init-script")
+  requires Dep("elasticsearch-extracted").with(version: version), 
+    Dep("elasticsearch-configured").with(version: version, port: port, cluster_name: cluster_name), 
+    Dep("elasticsearch-init-script")
 
   version.default("0.20.5")
   port.default(9200)
@@ -30,7 +36,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-extracted", :version) do
-  requires_when_unmet ("elasticsearch-downloaded").with(version: version)
+  requires_when_unmet Dep("elasticsearch-downloaded").with(version: version)
 
   def elasticsearch_home
     '/usr/local/elasticsearch'.p
@@ -68,7 +74,7 @@ dep("elasticsearch-downloaded", :version) do
 end
 
 dep("elasticsearch-configured",:version, :port, :cluster_name) do
-  requires_when_unmet ("elasticsearch-extracted").with(version: version)
+  requires_when_unmet Dep("elasticsearch-extracted").with(version: version)
 
   def etc_elasticsearch
     '/etc/elasticsearch'.p
@@ -110,4 +116,16 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-init-script") do
+
+  def elasticsearch_init_script
+    '/etc/init.d/elasticsearch'.p
+  end  
+
+  met? {
+    elasticsearch_init_script.exists?
+  }
+
+  meet {
+    render_erb 'elasticsearch/elasticsearch.init.d.erb', :to => '/etc/init.d/elasticsearch'
+  }
 end
