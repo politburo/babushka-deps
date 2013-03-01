@@ -25,7 +25,7 @@ dep 'user-exists', :username, :group, :homedir do
     met? { '/etc/passwd'.p.grep(/^#{username}:/) }
     meet {
       sudo "mkdir -p #{homedir}" and
-      sudo "useradd -m -s /bin/bash -d #{home_dir} -G #{group} #{username}" and
+      sudo "useradd -m -s /bin/bash -d #{homedir} -G #{group} #{username}" and
       sudo "chmod 701 #{homedir}"
     }
   end
