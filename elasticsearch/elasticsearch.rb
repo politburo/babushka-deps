@@ -10,7 +10,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
   }
 
   meet {
-    sudo "service elasticsearch start"
+    sudo "start elasticsearch"
   }
 end
 
