@@ -104,7 +104,7 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
     require 'pry'
     pry
 
-    modified_content.gsub!(/# http\.port: 9200/, "http.port: #{port}") if (port != 9200)
+    modified_content.gsub!(/# http\.port: 9200/, "http.port: #{port}") unless (port.to_s == "9200")
 
     tmp_elasticsearch_yml.open('w+') { | f | f.print modified_content }
 
