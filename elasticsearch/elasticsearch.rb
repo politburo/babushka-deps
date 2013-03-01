@@ -135,7 +135,7 @@ dep("elasticsearch-init-script") do
   }
 
   meet {
-    render_erb 'elasticsearch.conf.erb', to: '/etc/init.d/elasticsearch', sudo: true, perms: "+x"
+    render_erb 'elasticsearch.conf.erb', to: '/etc/init/elasticsearch.conf', sudo: true, perms: "+x"
     sudo "chown elasticsearch:elasticsearch #{elasticsearch_init_script}"
   }
 end
