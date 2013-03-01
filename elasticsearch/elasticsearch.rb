@@ -98,6 +98,7 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
     sudo "mkdir -p #{etc_elasticsearch}"
 
     original_content = original_elasticsearch_yml.read
+    raise "Couldn't read content of '#{original_elasticsearch_yml}'!" if original_content.nil? or (original_elasticsearch_yml.strip.length <= 0)
     modified_content = original_content.gsub(/cluster\.name: elasticsearch/, "cluster.name: #{cluster_name}").gsub(/# http\.port: 9200/, "http.port: #{port}")
 
     tmp_elasticsearch_yml.open('w+') { | f | f.rint modified_content }
