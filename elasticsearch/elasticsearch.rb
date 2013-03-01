@@ -36,7 +36,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-extracted", :version) do
-  requires_when_unmet ("elasticsearch-downloaded").with(version: version)
+  requires_when_unmet ("elasticsearch-downloaded").with(version: version), "elasticsearch-user"
 
   def elasticsearch_home
     '/usr/local/elasticsearch'.p
@@ -54,6 +54,7 @@ dep("elasticsearch-extracted", :version) do
     shell "cd /tmp && tar -xvzf #{elasticsearch_tar_gz}"
     sudo "mv /tmp/elasticsearch-#{version} #{elasticsearch_home}"
     shell "cd -"
+    sudo "chown -R elasticsearch:elasticsearch #{elasticsearch_home}"
   }
 end
 
@@ -74,7 +75,7 @@ dep("elasticsearch-downloaded", :version) do
 end
 
 dep("elasticsearch-configured",:version, :port, :cluster_name) do
-  requires_when_unmet ("elasticsearch-extracted").with(version: version)
+  requires_when_unmet ("elasticsearch-extracted").with(version: version), "elasticsearch-user"
 
   def etc_elasticsearch
     '/etc/elasticsearch'.p
@@ -112,20 +113,28 @@ dep("elasticsearch-configured",:version, :port, :cluster_name) do
     tmp_elasticsearch_yml.open('w+') { | f | f.print modified_content }
 
     sudo "mv #{tmp_elasticsearch_yml} #{elasticsearch_yml}"
+    sudo "chown -R elasticsearch:elasticsearch #{etc_elasticsearch}"
   }
 end
 
+dep("elasticsearch-user") do
+  requires 'benhoskins:user exists'.with(username: 'elasticsearch', home_dir_base: '/usr/local')
+end
+
+
 dep("elasticsearch-init-script") do
+  requires "elasticsearch-user"
 
   def elasticsearch_init_script
-    '/etc/init.d/elasticsearch'.p
-  end  
+    '/etc/init/elasticsearch.conf'.p
+  end
 
   met? {
     elasticsearch_init_script.exists?
   }
 
   meet {
-    render_erb 'elasticsearch.init.d.erb', to: '/etc/init.d/elasticsearch', sudo: true, perms: "+x"
+    render_erb 'elasticsearch.conf.erb', to: '/etc/init.d/elasticsearch', sudo: true, perms: "+x"
+    sudo "chown elasticsearch:elasticsearch #{elasticsearch_init_script}"
   }
 end
