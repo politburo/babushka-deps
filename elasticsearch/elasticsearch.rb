@@ -54,12 +54,10 @@ end
 dep("elasticsearch-downloaded", :version) do
 
   def elasticsearch_tar_gz
-    '/tmp/elasticsearch-#{version}.tar.gz'.p
+    "/tmp/elasticsearch-#{version}.tar.gz".p
   end
 
   met? {
-    require 'pry'
-    pry
     elasticsearch_tar_gz.exists?
   }
 
