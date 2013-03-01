@@ -58,6 +58,8 @@ dep("elasticsearch-downloaded", :version) do
   end
 
   met? {
+    require 'pry'
+    pry
     elasticsearch_tar_gz.exists?
   }
 
