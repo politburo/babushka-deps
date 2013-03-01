@@ -18,7 +18,7 @@ dep("java-installed") do
   met? {
     shell? "java -version"
   }
-elasticsearch-installed
+end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
   requires Dep("elasticsearch-extracted").with(version: version), 
@@ -126,6 +126,6 @@ dep("elasticsearch-init-script") do
   }
 
   meet {
-    render_erb 'elasticsearch/elasticsearch.init.d.erb', :to => '/etc/init.d/elasticsearch'
+    render_erb 'elasticsearch/elasticsearch.init.d.erb', to: '/etc/init.d/elasticsearch'
   }
 end
