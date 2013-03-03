@@ -12,7 +12,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
   meet {
     sudo "start elasticsearch"
     
-    wait_for(10, "Waiting for ES to start...") { shell? "curl http://localhost:#{port}" }
+    wait_for(10, "Waiting for ElasticSearch to start...") { shell? "curl http://localhost:#{port}" }
   }
 
   def wait_for timeout, message, &block
@@ -58,12 +58,16 @@ dep("elasticsearch-extracted", :version) do
     '/usr/local/elasticsearch'.p
   end
 
+  def elasticsearch_binary
+    elasticsearch_home / 'bin/elasticsearch'
+  end
+
   def elasticsearch_tar_gz
     "/tmp/elasticsearch-#{version}.tar.gz".p
   end
 
   met? {
-    elasticsearch_home.exists?
+    elasticsearch_home.exists? and elasticsearch_binary.exists?
   }
 
   meet {
