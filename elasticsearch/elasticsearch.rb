@@ -72,6 +72,7 @@ dep("elasticsearch-extracted", :version) do
 
   meet {
     shell "cd /tmp && tar -xvzf #{elasticsearch_tar_gz}"
+    sudo "rm -rf #{elasticsearch_home}"
     sudo "mv /tmp/elasticsearch-#{version} #{elasticsearch_home}"
     sudo "chown -R elasticsearch:elasticsearch #{elasticsearch_home}"
   }
