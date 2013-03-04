@@ -3,7 +3,7 @@ dep("elasticsearch-running", :version, :port, :cluster_name) do
 
   version.default("0.20.5")
   port.default(9200)
-  cluster_name.default(`hostname`)
+  cluster_name.default(`hostname`.strip)
 
   met? {
     shell? "curl http://localhost:#{port}"
