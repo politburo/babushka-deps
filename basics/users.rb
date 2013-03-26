@@ -2,7 +2,7 @@
 dep 'user-exists', :username, :group, :homedir do
   requires_when_unmet "group-exists".with(group)
 
-  homedir.default("/home/#{username}")
+  homedir.default!("/home/#{username}")
 
   on :osx do
     met? { !shell("dscl . -list /Users").split("\n").grep(username).empty? }
