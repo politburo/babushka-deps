@@ -30,41 +30,45 @@ dep("directory-exists", :dir, :creation_method) do
 end
 
 dep("directory-has-correct-ownership", :dir, :username, :group) do
+  requires "file-has-correct-ownership".with(file: dir, username: username, group: group)
+end
+
+dep("file-has-correct-ownership", :file, :username, :group) do
   requires_when_unmet 'politburo:user-exists'.with(username: username, group: group)
   
   username.default!(ENV['USER'])
   group.default!(ENV['USER'])
 
-  def directory
-    dir.p
+  def filepath
+    file.p
   end
 
   def does_exist?  
-     directory.exists?
+     filepath.exists?
   end
 
   def is_correct_ownership? 
     return false unless does_exist?
 
     require 'etc'
-    stat = directory.stat
+    stat = filepath.stat
 
-    dir_username = Etc.getpwuid(stat.uid).name
-    dir_group = Etc.getgrgid(stat.gid).name
+    file_username = Etc.getpwuid(stat.uid).name
+    file_group = Etc.getgrgid(stat.gid).name
 
-    (dir_username === username) and (dir_group === group)
+    (file_username === username) and (file_group === group)
   end
 
   met? {
-    log "Directory '#{dir}' #{ is_correct_ownership? ? 'is' : "isn't" } owned by #{username}:#{group}."
+    log "Path '#{file}' #{ is_correct_ownership? ? 'is' : "isn't" } owned by #{username}:#{group}."
 
     is_correct_ownership?    
   }
 
   meet {
-    sudo "chown -R #{username}:#{group} #{dir}"
-    unmeetable! "Couldn't change permission for: '#{dir}'" unless is_correct_ownership?
-    log_ok "Directory '#{dir}' now owned by #{username}:#{group}."
+    sudo "chown -R #{username}:#{group} #{file}"
+    unmeetable! "Couldn't change permission for: '#{file}'" unless is_correct_ownership?
+    log_ok "Path '#{file}' now owned by #{username}:#{group}."
   }
 end
 
