@@ -1,8 +1,7 @@
 dep('symlink', :symlink_to, :symlink_path, :create_as) do
   create_as.default!(ENV['USER'])
 
-  requires 'matrix data dir', 'matrix expanded'.with(matrix_version: matrix_version), 'user-exists'.with(username: create_as)
-  
+  requires 'user-exists'.with(username: create_as)
 
   def symlink
     symlink_path.p
