@@ -18,12 +18,18 @@ dep('firewall', :action, :from, :to_port) do
     ufw_rules
   end
 
+  def rule
+    { to_port: to_port, action: action, from: from }
+  end
+
   met? {
-    parse_ufw_output( sudo('ufw status numbered') ).include?({ to_port: to_port, action: action, from: from })
+    parse_ufw_output( sudo('ufw status numbered') ).include?(rule)
   }
 
   meet {
-    cmd = ("ufw #{ { allow_in: 'allow', deny_in: 'deny' }[action]} #{ from == :anywhere ? '' : "from #{from}"} to any #{to_port}")
+    action_s = { allow_in: 'allow', deny_in: 'deny' }[action]
+    raise "Don't know how to set up ufw for rule: #{rule}"
+    cmd = ("ufw #{ } #{ from == :anywhere ? '' : "from #{from}"} to any #{to_port}")
     log cmd
   }
 end
