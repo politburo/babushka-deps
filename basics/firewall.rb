@@ -19,7 +19,7 @@ dep('firewall', :action, :from, :to_port) do
   end
 
   def rule
-    { to_port: to_port, action: action, from: from }
+    { to_port: to_port.value, action: action.value, from: from.value }
   end
 
   met? {
