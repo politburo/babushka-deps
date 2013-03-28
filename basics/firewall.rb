@@ -23,10 +23,10 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
   end
 
   met? {
-    log_ok rule
+    log_ok rule.inspect
     ufw_rules = parse_ufw_output( sudo('ufw status numbered') )
 
-    log_ok ufw_rules
+    log_ok ufw_rules.inspect
 
     ufw_rules.include?(rule)
   }
