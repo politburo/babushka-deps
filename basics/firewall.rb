@@ -13,7 +13,7 @@ dep('firewall-enabled') do
   }
 end
 
-def('ufw-firewall-enabled') do
+dep('ufw-firewall-enabled') do
 
   met? {
     sudo 'ufw status'.include? "Status: active"
@@ -22,7 +22,7 @@ def('ufw-firewall-enabled') do
   meet {
     sudo 'ufw enable'
   }
-  
+
 end
 
 dep('ufw-firewall-rule-exists', :action, :from, :to_port) do
