@@ -3,7 +3,7 @@ require 'set'
 
 dep('firewall-rule-exists', :action, :from, :to_port) do
   requires {
-    on :ubuntu, 'ufw-firewall-rule-exists'.with(action: action, from: from, to_port: to_port)
+    on :ubuntu, 'ufw-firewall-rule-exists'# .with(action: action, from: from, to_port: to_port)
   }
 end
 
