@@ -26,10 +26,12 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
     parse_ufw_output( sudo('ufw status numbered') ).include?(rule)
   }
 
-  meet {
-    action_s = { allow_in: 'allow', deny_in: 'deny' }[action]
-    raise "Don't know how to set up ufw for rule: #{rule}"
-    cmd = ("ufw #{ } #{ from == :anywhere ? '' : "from #{from}"} to any #{to_port}")
+  meet {    
+    action_s = { allow_in: 'allow', deny_in: 'deny' }[rule[:action]]
+    from_s = ( from == :anywhere ? '' : "from #{from}" )
+
+    cmd = ("ufw #{ action_s } #{ from_s } to any #{to_port}")
+    
     log cmd
   }
 end
