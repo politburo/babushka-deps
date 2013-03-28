@@ -30,8 +30,8 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
     action_s = { allow_in: 'allow', deny_in: 'deny' }[rule[:action]]
     from_s = ( from == :anywhere ? '' : "from #{from}" )
 
-    cmd = ("ufw #{ action_s } #{ from_s } to any #{to_port}")
-    
+    cmd = ("ufw #{ action_s } #{ from_s } to any port #{to_port}")
+
     log cmd
   }
 end
