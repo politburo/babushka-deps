@@ -23,7 +23,12 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
   end
 
   met? {
-    parse_ufw_output( sudo('ufw status numbered') ).include?(rule)
+    log_ok rule
+    ufw_rules = parse_ufw_output( sudo('ufw status numbered') )
+
+    log_ok ufw_rules
+
+    ufw_rules.include?(rule)
   }
 
   meet {    
