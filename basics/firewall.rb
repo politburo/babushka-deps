@@ -1,6 +1,6 @@
 require 'set'
 
-dep('firewall', :action, :from, :to_port) do
+dep('firewall-rule-exists', :action, :from, :to_port) do
   action.default!(:allow_in)
   from.default!(:anywhere)
 
@@ -19,7 +19,7 @@ dep('firewall', :action, :from, :to_port) do
   end
 
   def rule
-    { to_port: to_port.value, action: action.value, from: from.value }
+    { to_port: to_port.current_value, action: action.current_value, from: from.current_value }
   end
 
   met? {
