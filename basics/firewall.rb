@@ -2,7 +2,7 @@ require 'set'
 
 
 dep('firewall-rule-exists', :action, :from, :to_port) do
-  _action = action
+  _action = action # Need to make this available in the lambda
   _from = from
   _to_port = to_port
 
