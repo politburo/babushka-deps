@@ -1,6 +1,31 @@
 require 'set'
 
+
 dep('firewall-rule-exists', :action, :from, :to_port) do
+  requires {
+    on :ubuntu, 'ufw-firewall-rule-exists'.with(action: action, from: from, to_port: to_port)
+  }
+end
+
+dep('firewall-enabled') do
+  requires {
+    on :ubuntu, 'ufw-firewall-enabled'
+  }
+end
+
+def('ufw-firewall-enabled') do
+
+  met? {
+    sudo 'ufw status'.include? "Status: active"
+  }
+
+  meet {
+    sudo 'ufw enable'
+  }
+  
+end
+
+dep('ufw-firewall-rule-exists', :action, :from, :to_port) do
   action.default!(:allow_in)
   from.default!(:anywhere)
 
@@ -40,7 +65,7 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
     cmd = "ufw #{ rule_desc(rule) }"
 
     log_ok "Executing 'sudo #{cmd}'..."
-    
+
     sudo cmd
   }
 end
