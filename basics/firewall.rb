@@ -19,7 +19,7 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
   end
 
   def rule
-    { to_port: to_port.current_value, action: action.current_value, from: from.current_value }
+    { to_port: to_port.current_value, action: (action.current_value || :allow_in), from: (from.current_value || :anywhere) }
   end
 
   met? {
