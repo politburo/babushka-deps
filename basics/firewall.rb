@@ -35,12 +35,12 @@ dep('ufw-firewall-rule-exists', :action, :from, :to_port) do
 
   def parse_ufw_output(output)
     ufw_rules = Set.new
-    output.scan(/^\[(?<rule_num>[\s\d]+)\]\s+(?<to_port>\d+\/?\S+)\s+(?<action>\S+\s?\S+)\s+(?<from>.*)$/) do | m | 
+    output.scan(/^\[([\s\d]+)\]\s+(\d+\/?\S+)\s+(\S+\s?\S+)\s+(.*)$/) do | m | 
       md = Regexp.last_match
       ufw_rules << { 
-        :to_port => md[:to_port], 
-        :action => md[:action].gsub(/\s/, '_').downcase.to_sym, 
-        :from => md[:from].include?('Anywhere') ? :anywhere : md[:from] 
+        :to_port => md[2], 
+        :action => md[3].gsub(/\s/, '_').downcase.to_sym, 
+        :from => md[4].include?('Anywhere') ? :anywhere : md[4] 
       }
     end
 
