@@ -1,3 +1,5 @@
+unless /1\.8/.match(RUBY_VERSION) do 
+
 dep("elasticsearch-running", :version, :port, :cluster_name) do
   requires_when_unmet ("java-installed"), ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
@@ -190,3 +192,4 @@ dep("elasticsearch-data-dir") do
   }
 end
 
+end
