@@ -1,8 +1,8 @@
 dep("elasticsearch-running", :version, :port, :cluster_name) do
   requires_when_unmet ("java-installed"), ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
 
-  version.default("0.20.5")
-  port.default(9200)
+  version.default!("0.20.5")
+  port.default!(9200)
   cluster_name.default(`hostname`.strip)
 
   met? {
