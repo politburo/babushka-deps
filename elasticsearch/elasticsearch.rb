@@ -1,7 +1,5 @@
-unless /1\.8/.match(RUBY_VERSION) do 
-
 dep("elasticsearch-running", :version, :port, :cluster_name) do
-  requires_when_unmet ("java-installed"), ("elasticsearch-installed").with(version: version, port: port, cluster_name: cluster_name)
+  requires_when_unmet ("java-installed"), ("elasticsearch-installed").with(:version => version, :port => port, :cluster_name => cluster_name)
 
   version.default!("0.20.5")
   port.default!(9200)
@@ -37,8 +35,8 @@ dep("java-installed") do
 end
 
 dep("elasticsearch-installed", :version, :port, :cluster_name) do
-  requires "elasticsearch-extracted".with(version: version), 
-    "elasticsearch-configured".with(version: version, port: port, cluster_name: cluster_name), 
+  requires "elasticsearch-extracted".with(:version => version), 
+    "elasticsearch-configured".with(:version => version, :port => port, :cluster_name => cluster_name), 
     "elasticsearch-init-script",
     "elasticsearch-log-dir",
     "elasticsearch-data-dir"
@@ -54,7 +52,7 @@ dep("elasticsearch-installed", :version, :port, :cluster_name) do
 end
 
 dep("elasticsearch-extracted", :version) do
-  requires_when_unmet ("elasticsearch-downloaded").with(version: version), "elasticsearch-user"
+  requires_when_unmet ("elasticsearch-downloaded").with(:version => version), "elasticsearch-user"
 
   def elasticsearch_home
     '/usr/local/elasticsearch'.p
@@ -97,7 +95,7 @@ dep("elasticsearch-downloaded", :version) do
 end
 
 dep("elasticsearch-configured",:version, :port, :cluster_name) do
-  requires_when_unmet ("elasticsearch-extracted").with(version: version), "elasticsearch-user"
+  requires_when_unmet ("elasticsearch-extracted").with(:version => version), "elasticsearch-user"
 
   def etc_elasticsearch
     '/etc/elasticsearch'.p
@@ -141,9 +139,9 @@ end
 
 dep("elasticsearch-user") do
   requires 'user-exists'.with(
-    username: 'elasticsearch', 
-    group: 'elasticsearch', 
-    homedir: '/usr/local/elasticsearch'.p)
+    :username => 'elasticsearch', 
+    :group => 'elasticsearch', 
+    :homedir => '/usr/local/elasticsearch'.p)
 end
 
 dep("elasticsearch-init-script") do
@@ -158,7 +156,7 @@ dep("elasticsearch-init-script") do
   }
 
   meet {
-    render_erb 'elasticsearch.conf.erb', to: '/etc/init/elasticsearch.conf', sudo: true, perms: "+x"
+    render_erb 'elasticsearch.conf.erb', :to => '/etc/init/elasticsearch.conf', :sudo => true, :perms => "+x"
   }
 end
 
@@ -190,6 +188,4 @@ dep("elasticsearch-data-dir") do
     sudo "mkdir -p #{elasticsearch_data_dir}" and 
     sudo "chown -R elasticsearch:elasticsearch #{elasticsearch_data_dir}"
   }
-end
-
 end
