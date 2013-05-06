@@ -7,7 +7,7 @@ dep('firewall-rule-exists', :action, :from, :to_port) do
   _to_port = to_port
 
   requires {
-    on :ubuntu, 'ufw-firewall-rule-exists'.with(action: _action, from: _from, to_port: _to_port)
+    on :ubuntu, 'ufw-firewall-rule-exists'.with(:action => _action, :from => _from, :to_port => _to_port)
   }
 end
 
@@ -38,9 +38,9 @@ dep('ufw-firewall-rule-exists', :action, :from, :to_port) do
     output.scan(/^\[(?<rule_num>[\s\d]+)\]\s+(?<to_port>\d+\/?\S+)\s+(?<action>\S+\s?\S+)\s+(?<from>.*)$/) do | m | 
       md = Regexp.last_match
       ufw_rules << { 
-        to_port: md[:to_port], 
-        action: md[:action].gsub(/\s/, '_').downcase.to_sym, 
-        from: md[:from].include?('Anywhere') ? :anywhere : md[:from] 
+        :to_port => md[:to_port], 
+        :action => md[:action].gsub(/\s/, '_').downcase.to_sym, 
+        :from => md[:from].include?('Anywhere') ? :anywhere : md[:from] 
       }
     end
 
@@ -48,11 +48,11 @@ dep('ufw-firewall-rule-exists', :action, :from, :to_port) do
   end
 
   def rule
-    { to_port: to_port.current_value.to_s, action: (action.current_value || :allow_in), from: (from.current_value || :anywhere) }
+    { :to_port => to_port.current_value.to_s, :action => (action.current_value || :allow_in), :from => (from.current_value || :anywhere) }
   end
 
   def rule_desc(_rule)
-    action_s = { allow_in: 'allow', deny_in: 'deny' }[_rule[:action]]
+    action_s = { :allow_in => 'allow', :deny_in => 'deny' }[_rule[:action]]
     from_s = ( _rule[:from] == :anywhere ? '' : "from #{_rule[:from]}" )
 
     "#{ action_s } #{ from_s } to any port #{_rule[:to_port]}"

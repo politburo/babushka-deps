@@ -1,7 +1,7 @@
 dep('symlink', :symlink_to, :symlink_path, :create_as) do
   create_as.default!(ENV['USER'])
 
-  requires 'user-exists'.with(username: create_as)
+  requires 'user-exists'.with(:username => create_as)
 
   def symlink
     symlink_path.p
@@ -19,7 +19,7 @@ dep('symlink', :symlink_to, :symlink_path, :create_as) do
   }
   
   meet {
-    shell "ln -sf #{symlink_to} #{symlink}", as: create_as
+    shell "ln -sf #{symlink_to} #{symlink}", :as => create_as
     log_ok "Set symlink '#{symlink}' -> '#{symlink_to}'"
   }
 end

@@ -30,11 +30,11 @@ dep("directory-exists", :dir, :creation_method) do
 end
 
 dep("directory-has-correct-ownership", :dir, :username, :group) do
-  requires "file-has-correct-ownership".with(file: dir, username: username, group: group)
+  requires "file-has-correct-ownership".with(:file => dir, :username => username, :group => group)
 end
 
 dep("file-has-correct-ownership", :file, :username, :group) do
-  requires_when_unmet 'politburo:user-exists'.with(username: username, group: group)
+  requires_when_unmet 'politburo:user-exists'.with(:username => username, :group => group)
   
   username.default!(ENV['USER'])
   group.default!(ENV['USER'])
@@ -74,7 +74,7 @@ end
 
 
 dep( "directory", :dir, :creation_method, :username, :group ) do
-  requires 'directory-exists'.with(dir: dir, creation_method: creation_method),
-    'directory-has-correct-ownership'.with(dir: dir, username: username, group: group)
+  requires 'directory-exists'.with(:dir => dir, :creation_method => creation_method),
+    'directory-has-correct-ownership'.with(:dir => dir, :username => username, :group => group)
 
 end
